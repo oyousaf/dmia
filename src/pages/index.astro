@@ -1,0 +1,149 @@
+---
+import Base from "../layouts/Base.astro";
+import Kicker from "../components/Kicker.astro";
+import Term from "../components/Term.astro";
+import HeroArt from "../components/HeroArt.astro";
+import SectorMap from "../components/SectorMap.tsx";
+import DepartureBoard from "../components/DepartureBoard.tsx";
+import { capabilities, work, capabilityTitle } from "../data/site";
+
+const aTrain = work.find((w) => w.slug === "a-train-acquisition")!;
+const rows = work.map((w) => ({ ...w, service: capabilityTitle(w.capability) }));
+const stations = work.map(({ slug, short, title, capability }) => ({ slug, short, title, capability }));
+const caps = capabilities.map(({ id, title }) => ({ id, title }));
+
+const values = [
+  { word: "Expertise", text: "Deep technical knowledge and sector experience you can trust." },
+  { word: "Collaboration", text: "Working alongside clients and partners to deliver shared success." },
+  { word: "Agility", text: "A flexible approach that adapts quickly when the programme changes." },
+];
+---
+<Base>
+  <!-- Hero -->
+  <section class="relative isolate min-h-[100svh] overflow-hidden">
+    <div class="absolute inset-y-0 right-[-20%] -z-10 w-[110%] opacity-35 sm:right-[-6%] sm:opacity-90 sm:w-[62%]">
+      <HeroArt />
+    </div>
+    <div class="mx-auto flex min-h-[100svh] max-w-[1400px] flex-col justify-end px-4 pt-32 pb-10 sm:px-8">
+      <Kicker n="00">Transport & infrastructure advisory · London</Kicker>
+      <h1 class="display kinetic mt-8 text-[clamp(3.4rem,11.5vw,11rem)]">
+        <span>Advice</span> <span>that</span> <span>keeps</span>{" "}<br class="hidden sm:block" />
+        <span>major</span> <span>programmes</span> <em><span>moving.</span></em>
+      </h1>
+      <div class="mt-12 grid gap-8 border-t border-rule pt-6 sm:grid-cols-[1.3fr_1fr_auto] sm:items-end">
+        <p class="max-w-xl text-lg leading-relaxed text-muted">
+          Commercial, technical and financial expertise for the people who fund, own and run rail, road and bus.
+        </p>
+        <p class="label text-muted">Rail · Road · Bus<br />Governments · Investors · Operators</p>
+        <a href="/work" class="group label flex items-center gap-3 rounded-full bg-fg px-6 py-4 text-bg transition-colors hover:bg-coral hover:text-night">
+          See the work <span class="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statement -->
+  <section class="mx-auto max-w-[1400px] px-4 py-32 sm:px-8">
+    <Kicker n="01">About</Kicker>
+    <p class="display thicken mt-10 max-w-[22ch] text-[clamp(2rem,5vw,4.5rem)] leading-[1.02]">
+      We bring commercial, technical and financial thinking together, so governments, investors, asset owners and operators can make
+      <em>the big calls</em> with confidence.
+    </p>
+    <div class="mt-16 grid gap-10 text-muted sm:grid-cols-2 lg:ml-[33%]">
+      <p class="reveal leading-relaxed">
+        From <Term t="PPP" /> and <Term t="DBFO" /> concessions to new rolling stock fleets, we combine a strategic mindset with a
+        results-driven approach to solve problems and deliver major programmes.
+      </p>
+      <p class="reveal leading-relaxed">
+        Every engagement is tailored. We drive transformation and long-term growth, from greenfield and <Term t="M&A" /> to refinancing.
+      </p>
+    </div>
+  </section>
+
+  <!-- Proof -->
+  <section class="bg-deep py-28 text-paper [color-scheme:dark]">
+    <div class="mx-auto max-w-[1400px] px-4 sm:px-8">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <Kicker n="02" class="!text-paper/60">Recent transaction · with {aTrain.partner}</Kicker>
+          <h2 class="display mt-6 text-[clamp(2.5rem,6vw,5.5rem)]">Arlanda Express, <em>acquired.</em></h2>
+        </div>
+        <a href={`/work/${aTrain.slug}`} class="label rounded-full border border-paper/25 px-5 py-3 hover:border-coral hover:text-coral">Read the case →</a>
+      </div>
+      <dl class="mt-16 grid grid-cols-2 gap-px overflow-hidden bg-paper/10 lg:grid-cols-4">
+        {aTrain.facts!.map((f, i) => (
+          <div class="reveal bg-deep p-6 sm:p-8" style={`animation-range: entry ${i * 6}% entry ${60 + i * 6}%`}>
+            <dt class="label text-paper/50">{f.k}</dt>
+            <dd class="display mt-4 text-[clamp(2.5rem,6vw,5rem)] text-coral">{f.v}</dd>
+          </div>
+        ))}
+      </dl>
+      <p class="mt-8 max-w-2xl text-paper/70">
+        Technical due diligence support for EQT's acquisition of the operator of Stockholm's 18-minute airport link, ahead of a brand-new fleet around 2030.
+      </p>
+    </div>
+  </section>
+
+  <!-- Network map -->
+  <section class="mx-auto max-w-[1400px] px-4 py-32 sm:px-8">
+    <div class="mb-14 grid gap-6 lg:grid-cols-2 lg:items-end">
+      <div>
+        <Kicker n="03">The network</Kicker>
+        <h2 class="display mt-6 text-[clamp(2.5rem,6vw,5.5rem)]">Three lines, <em>one interchange.</em></h2>
+      </div>
+      <p class="max-w-md text-muted lg:justify-self-end">
+        Every project is a station on the map. Filter by service to see where each capability has been used.
+      </p>
+    </div>
+    <SectorMap client:visible stations={stations} caps={caps} />
+  </section>
+
+  <!-- Capabilities -->
+  <section class="mx-auto max-w-[1400px] px-4 py-20 sm:px-8">
+    <Kicker n="04">Capabilities</Kicker>
+    <div class="mt-10 grid gap-4 md:grid-cols-2">
+      {capabilities.map((c, i) => (
+        <a
+          href={`/services#${c.id}`}
+          class:list={["cut reveal group relative flex min-h-[22rem] flex-col justify-between overflow-hidden bg-panel p-8 transition-colors hover:bg-coral hover:text-night sm:p-10", i % 2 && "md:mt-16"]}
+        >
+          <span class="flex items-start justify-between">
+            <span class="label">{c.n}</span>
+            <span class="text-2xl transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+          </span>
+          <span>
+            <span class="display kinetic block text-[clamp(2.25rem,4.5vw,3.75rem)]">{c.title}</span>
+            <span class="mt-4 block max-w-sm opacity-75">{c.lede}</span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="mx-auto mt-24 max-w-[1400px] px-4 py-20 sm:px-8">
+    <Kicker n="05">What drives us</Kicker>
+    <ul class="mt-10">
+      {values.map((v, i) => (
+        <li class="grid items-baseline gap-4 border-t border-rule py-8 last:border-b md:grid-cols-[1fr_1fr]">
+          <span class="display thicken text-[clamp(3rem,9vw,8rem)]">
+            <span class="label mr-4 align-top text-accent">0{i + 1}</span>{v.word}
+          </span>
+          <p class="reveal max-w-sm text-lg text-muted md:justify-self-end">{v.text}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Board -->
+  <section class="mx-auto max-w-[1400px] px-4 py-20 sm:px-8">
+    <div class="mb-10 flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <Kicker n="06">Selected work</Kicker>
+        <h2 class="display mt-6 text-[clamp(2.5rem,6vw,5.5rem)]">Now <em>departing.</em></h2>
+      </div>
+      <a href="/work" class="label rounded-full border border-rule px-5 py-3 hover:border-coral hover:text-accent">All case studies →</a>
+    </div>
+    <DepartureBoard client:visible rows={rows} />
+  </section>
+</Base>

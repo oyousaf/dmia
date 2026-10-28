@@ -1,0 +1,286 @@
+@import "tailwindcss";
+@import "@fontsource-variable/fraunces/full.css";
+@import "@fontsource-variable/fraunces/full-italic.css";
+@import "@fontsource-variable/schibsted-grotesk";
+@import "@fontsource-variable/martian-mono/wdth.css";
+
+/* ---------- Tokens ---------- */
+
+:root {
+  color-scheme: light dark;
+
+  --coral: oklch(66% 0.19 20); /* #F0505F */
+  --coral-deep: oklch(54% 0.19 23); /* #C8323F, text-safe on paper */
+  --night: oklch(18% 0.025 260); /* #0E1420 */
+  --paper: oklch(95% 0.015 85); /* #F3EEE4 */
+  --verdigris: oklch(54% 0.08 185); /* #2F7F78 */
+  --concrete: oklch(63% 0.008 70); /* #8E8A84 */
+
+  --bg: light-dark(var(--paper), var(--night));
+  --fg: light-dark(var(--night), var(--paper));
+  --accent: light-dark(var(--coral-deep), var(--coral));
+  --muted: light-dark(oklch(45% 0.01 70), oklch(72% 0.01 70));
+  --rule: light-dark(oklch(18% 0.025 260 / 0.14), oklch(95% 0.015 85 / 0.14));
+  --deep: light-dark(var(--night), oklch(12.5% 0.02 260));
+  --panel: light-dark(oklch(92% 0.018 85), oklch(22% 0.028 260));
+  --grain-blend: light-dark(multiply, screen);
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+@theme {
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Martian Mono Variable", ui-monospace, monospace;
+
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-accent: var(--accent);
+  --color-coral: var(--coral);
+  --color-verdigris: var(--verdigris);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-panel: var(--panel);
+  --color-night: var(--night);
+  --color-deep: var(--deep);
+  --color-paper: var(--paper);
+}
+
+/* Animatable font axes */
+@property --wght { syntax: "<number>"; inherits: true; initial-value: 320; }
+@property --soft { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --wonk { syntax: "<number>"; inherits: true; initial-value: 0; }
+
+/* ---------- Base ---------- */
+
+@view-transition { navigation: auto; }
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  scrollbar-color: var(--accent) transparent;
+  interpolate-size: allow-keywords;
+}
+
+body {
+  background: var(--bg);
+  min-height: 100dvh;
+  overflow-x: clip;
+}
+
+/* Film grain */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection { background: var(--coral); color: var(--night); }
+
+:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+}
+
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* ---------- Type ---------- */
+
+.display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "wght" var(--wght), "SOFT" var(--soft), "WONK" var(--wonk);
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+.display em {
+  font-style: italic;
+  color: var(--accent);
+  --wonk: 1;
+}
+
+/* Words soften when you touch them */
+.kinetic span {
+  display: inline-block;
+  transition: --wght 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), --soft 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.kinetic span:hover { --wght: 720; --soft: 100; }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-variation-settings: "wdth" 112;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Cut corners: the logo's diagonal ---------- */
+
+.cut {
+  --cut: 22px;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+}
+@supports (corner-shape: bevel) {
+  .cut {
+    clip-path: none;
+    border-radius: 0 var(--cut) 0 var(--cut);
+    corner-shape: bevel;
+  }
+}
+
+/* ---------- Track lines ---------- */
+
+.tracks {
+  background-image: repeating-linear-gradient(
+    -62deg,
+    transparent 0 22px,
+    color-mix(in oklch, var(--coral) 55%, transparent) 22px 24px
+  );
+}
+
+/* ---------- Scroll-driven motion (CSS only) ---------- */
+
+/* Timelines live in their own block: Lightning CSS would otherwise fold them into
+   the `animation` shorthand, which Chrome rejects. Without support the 0s
+   animations simply land on their end state. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal { animation: reveal linear both; }
+  .draw path,
+  .draw line,
+  .draw polyline {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw linear both;
+  }
+  .thicken { animation: thicken linear both; }
+  .progress-bar { animation: grow linear both; transform-origin: left; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation-timeline: view();
+      animation-range: entry 5% entry 70%;
+    }
+    /* Named timeline on the <svg>: view() on SVG children tracks the wrong box */
+    .draw { view-timeline: --draw block; }
+    .draw path,
+    .draw line,
+    .draw polyline {
+      animation-timeline: --draw;
+      animation-range: entry 0% cover 50%;
+    }
+    .thicken {
+      animation-timeline: view();
+      animation-range: cover 10% cover 60%;
+    }
+    .progress-bar { animation-timeline: scroll(root); }
+  }
+}
+
+@keyframes reveal {
+  from { opacity: 0; translate: 0 2.5rem; filter: blur(6px); }
+  to { opacity: 1; translate: 0 0; filter: blur(0); }
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes thicken { from { --wght: 260; --soft: 0; } to { --wght: 620; --soft: 60; } }
+@keyframes grow { from { scale: 0 1; } to { scale: 1 1; } }
+
+/* ---------- Glossary popovers (anchor positioned) ---------- */
+
+.term {
+  font: inherit;
+  color: inherit;
+  text-decoration: underline dotted var(--accent);
+  text-underline-offset: 0.25em;
+  cursor: help;
+}
+
+.tip {
+  margin: 0;
+  inset: auto;
+  max-width: 18rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--rule);
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  position-area: block-start;
+  position-try-fallbacks: flip-block;
+  margin-block: 0.5rem;
+  opacity: 0;
+  translate: 0 6px;
+  transition: opacity 0.2s, translate 0.2s, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
+}
+.tip:popover-open { opacity: 1; translate: 0 0; }
+@starting-style { .tip:popover-open { opacity: 0; translate: 0 6px; } }
+@supports not (position-area: block-start) {
+  .tip { position: fixed; inset: auto 1rem 1rem auto; }
+}
+
+/* ---------- Mobile menu sheet ---------- */
+
+.sheet {
+  margin: 0;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  background: var(--night);
+  color: var(--paper);
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  transition: opacity 0.35s, clip-path 0.5s cubic-bezier(0.7, 0, 0.2, 1), display 0.5s allow-discrete, overlay 0.5s allow-discrete;
+}
+.sheet:popover-open { opacity: 1; clip-path: inset(0 0 0 0); }
+@starting-style { .sheet:popover-open { opacity: 0; clip-path: inset(0 0 100% 0); } }
+
+/* ---------- Form controls ---------- */
+
+.field {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: 0.75rem 0;
+  font-size: 1.125rem;
+  color: var(--fg);
+  transition: border-color 0.2s;
+}
+.field:focus { outline: none; border-color: var(--coral); }
+textarea.field { field-sizing: content; min-height: 4lh; resize: none; }
+
+@supports (appearance: base-select) {
+  select.field,
+  select.field::picker(select) { appearance: base-select; }
+  select.field::picker(select) {
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    padding: 0.35rem;
+    margin-top: 0.35rem;
+  }
+  select.field option { padding: 0.6rem 0.75rem; }
+  select.field option:checked { color: var(--accent); }
+  select.field option::checkmark { content: "→"; }
+}
+
+/* Shared element names for cross-document view transitions */
+::view-transition-group(*) { animation-duration: 0.45s; animation-timing-function: cubic-bezier(0.7, 0, 0.2, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  ::view-transition-group(*) { animation: none !important; }
+}

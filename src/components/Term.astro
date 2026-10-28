@@ -1,0 +1,7 @@
+---
+import { glossary } from "../data/site";
+interface Props { t: keyof typeof glossary | string }
+const { t } = Astro.props;
+const id = `g-${t.replace(/[^a-z]/gi, "").toLowerCase()}-${Math.random().toString(36).slice(2, 7)}`;
+---
+<button type="button" class="term" popovertarget={id}>{t}</button><span popover id={id} class="tip" role="tooltip"><strong class="label block mb-1 text-coral">{t}</strong>{glossary[t]}</span>

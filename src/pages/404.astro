@@ -1,0 +1,12 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+---
+<Base title="Not found">
+  <PageHero kicker="Error 404" n="!!">
+    <span>Wrong</span> <em><span>platform.</span></em>
+    <Fragment slot="lede">
+      This page has been withdrawn from service. <a href="/" class="text-accent underline underline-offset-4">Back to the start →</a>
+    </Fragment>
+  </PageHero>
+</Base>

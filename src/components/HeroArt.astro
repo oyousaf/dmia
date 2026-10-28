@@ -1,0 +1,54 @@
+---
+// Oversized version of the logo's parallel diagonals, with a train running each coral line.
+const lines = Array.from({ length: 9 }, (_, i) => i);
+---
+<svg class="hero-art h-full w-full" viewBox="0 0 800 880" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true">
+  {lines.map((i) => (
+    <path
+      d={`M${-60 + i * 70} 900 L${380 + i * 70} -20`}
+      pathLength="1"
+      stroke={i === 4 || i === 5 ? "var(--coral)" : "var(--rule)"}
+      stroke-width={i === 4 || i === 5 ? 10 : 2}
+      style={`--i:${i}`}
+    />
+  ))}
+  {[
+    { cls: "runner", d: `M${-60 + 4 * 70} 900 L${380 + 4 * 70} -20` },
+    { cls: "runner runner-b", d: `M${380 + 5 * 70} -20 L${-60 + 5 * 70} 900` },
+  ].map((t) => (
+    <g class={t.cls} style={`offset-path: path('${t.d}')`}>
+      {[-58, -18, 22].map((x, i) => (
+        <g>
+          <rect x={x} y="-9" width="36" height="18" rx={i === 2 ? 9 : 4} fill="var(--fg)" />
+          <rect x={x + 6} y="-1.5" width={i === 2 ? 20 : 24} height="3" rx="1.5" fill="var(--coral)" />
+        </g>
+      ))}
+    </g>
+  ))}
+</svg>
+
+<style>
+  .hero-art path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: hero-draw 1.4s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+    animation-delay: calc(var(--i) * 70ms + 200ms);
+  }
+  /* Leaves the station, cruises, slows into the next one */
+  .runner {
+    offset-rotate: auto;
+    animation: run 7s cubic-bezier(0.65, 0, 0.35, 1) 1.8s infinite both;
+  }
+  .runner-b { animation-delay: 5.3s; }
+  @media (max-width: 639px) { .runner { display: none; } }
+  @keyframes hero-draw { to { stroke-dashoffset: 0; } }
+  @keyframes run {
+    from { offset-distance: 0%; opacity: 0; }
+    8%, 92% { opacity: 1; }
+    to { offset-distance: 100%; opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-art path { stroke-dashoffset: 0; animation: none; }
+    .runner { display: none; }
+  }
+</style>

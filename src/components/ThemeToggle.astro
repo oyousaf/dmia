@@ -1,0 +1,25 @@
+<button
+  type="button"
+  id="theme-toggle"
+  class="label group relative flex size-9 items-center justify-center rounded-full border border-rule hover:border-coral"
+  aria-label="Toggle colour scheme"
+>
+  <svg viewBox="0 0 20 20" class="size-4" aria-hidden="true">
+    <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.5" />
+    <path d="M10 3a7 7 0 0 1 0 14z" fill="currentColor" />
+  </svg>
+</button>
+<script>
+  const btn = document.getElementById("theme-toggle");
+  btn?.addEventListener("click", () => {
+    const root = document.documentElement;
+    const dark = root.dataset.theme
+      ? root.dataset.theme === "dark"
+      : matchMedia("(prefers-color-scheme: dark)").matches;
+    const next = dark ? "light" : "dark";
+    const apply = () => (root.dataset.theme = next);
+    try { localStorage.setItem("theme", next); } catch {}
+    if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) return apply();
+    document.startViewTransition(apply);
+  });
+</script>

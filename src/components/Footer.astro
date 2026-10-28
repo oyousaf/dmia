@@ -1,0 +1,40 @@
+---
+import Mark from "./Mark.astro";
+import { company, nav } from "../data/site";
+---
+<footer class="relative mt-32 overflow-hidden bg-deep text-paper [color-scheme:dark]">
+  <div class="tracks pointer-events-none absolute -right-40 bottom-0 h-[140%] w-[60%] -skew-x-12 opacity-20"></div>
+  <div class="relative mx-auto max-w-[1400px] px-4 pt-24 pb-10 sm:px-8">
+    <div class="grid gap-16 lg:grid-cols-[1.4fr_1fr]">
+      <div>
+        <p class="label mb-6 text-coral">Next station</p>
+        <a href="/contact" class="display group block text-[clamp(3rem,9vw,8.5rem)]">
+          Let's talk <em class="inline-block transition-transform duration-500 group-hover:translate-x-4">transport.</em>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 gap-8 self-end">
+        <div>
+          <p class="label mb-4 opacity-50">Pages</p>
+          <ul class="space-y-2">
+            {nav.map((l) => <li><a href={l.href} class="hover:text-coral">{l.label}</a></li>)}
+          </ul>
+        </div>
+        <div>
+          <p class="label mb-4 opacity-50">Registered</p>
+          <p class="text-sm leading-relaxed opacity-80">{company.address}</p>
+          <p class="label mt-3 opacity-50">Co. {company.number}</p>
+        </div>
+      </div>
+    </div>
+
+    <Mark class="mt-24 h-auto w-full text-coral/90" />
+
+    <div class="mt-10 flex flex-col gap-4 border-t border-paper/15 pt-6 text-xs opacity-70 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {new Date().getFullYear()} {company.legal}</p>
+      <p class="label">
+        Unofficial concept by <a href="https://legxcysol.dev" class="underline decoration-coral underline-offset-4 hover:text-coral">Legxcy Solutions</a>
+        · not affiliated · <a href={company.official} class="underline decoration-coral underline-offset-4 hover:text-coral">official site</a>
+      </p>
+    </div>
+  </div>
+</footer>

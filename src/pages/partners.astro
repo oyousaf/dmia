@@ -1,0 +1,78 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Kicker from "../components/Kicker.astro";
+import Term from "../components/Term.astro";
+import { work } from "../data/site";
+
+const aTrain = work.find((w) => w.slug === "a-train-acquisition")!;
+const benefits = [
+  { t: "Seamless integration", d: "Commercial and technical workstreams run as one team, not two reports stapled together." },
+  { t: "Two viewpoints", d: "Strategic thinking from both the commercial and the technical side of every deal." },
+  { t: "Tight timelines", d: "Smooth delivery when the transaction clock is running." },
+];
+---
+<Base title="Partners" description="DM Infrastructure Advisory and IPEX Consulting: a one-stop shop for transport transactions.">
+  <PageHero kicker="Collaboration" n="01">
+    <span>Two</span> <span>firms,</span> <em><span>one</span> <span>line.</span></em>
+    <Fragment slot="lede">
+      We work with leading experts across the sector. With IPEX Consulting we offer combined commercial and technical expertise, a one-stop shop for transport transactions.
+    </Fragment>
+  </PageHero>
+
+  <!-- Merge diagram -->
+  <section class="mx-auto max-w-[1400px] px-4 py-10 sm:px-8">
+    <div class="cut relative overflow-hidden bg-panel p-6 [--cut:32px] sm:p-12">
+      <svg class="draw h-auto w-full" viewBox="0 0 1000 300" fill="none" aria-hidden="true">
+        <path d="M0 70 H360 L470 150 H1000" pathLength="1" stroke="var(--coral)" stroke-width="12" />
+        <path d="M0 230 H360 L470 150" pathLength="1" stroke="var(--verdigris)" stroke-width="12" />
+        <circle cx="470" cy="150" r="22" fill="var(--bg)" stroke="var(--fg)" stroke-width="6" />
+      </svg>
+      <div class="mt-6 grid gap-6 sm:absolute sm:inset-x-12 sm:top-8 sm:mt-0 sm:grid-cols-3">
+        <p class="label text-accent">DMIA · commercial & financial</p>
+        <p class="label sm:col-start-3 sm:text-right">One team → client</p>
+      </div>
+      <p class="label text-verdigris sm:absolute sm:bottom-8 sm:left-12">IPEX · technical</p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1400px] px-4 py-24 sm:px-8">
+    <Kicker n="02">Why it works</Kicker>
+    <div class="mt-10 grid gap-px overflow-hidden border border-rule bg-rule md:grid-cols-3">
+      {benefits.map((b, i) => (
+        <div class="reveal bg-bg p-8">
+          <span class="label text-accent">0{i + 1}</span>
+          <h3 class="display mt-10 text-4xl">{b.t}</h3>
+          <p class="mt-4 text-muted">{b.d}</p>
+        </div>
+      ))}
+    </div>
+    <p class="display thicken mt-20 max-w-[24ch] text-[clamp(1.75rem,3.5vw,3rem)] leading-[1.1]">
+      Proven in 2025 on several transactions, including the Arlanda Express buy-side due diligence and a European <em>high-speed rolling stock</em> investment.
+    </p>
+  </section>
+
+  <section class="bg-deep py-28 text-paper [color-scheme:dark]">
+    <div class="mx-auto grid max-w-[1400px] gap-12 px-4 sm:px-8 lg:grid-cols-[1fr_1.2fr]">
+      <div>
+        <Kicker n="03" class="!text-paper/60">Project example</Kicker>
+        <h2 class="display mt-6 text-[clamp(2.5rem,6vw,5.5rem)]">A-Train <em>acquisition.</em></h2>
+      </div>
+      <div class="space-y-6 text-lg leading-relaxed text-paper/80">
+        <p>
+          We supported IPEX Consulting in its Technical Advisor role to EQT Group on the agreement to acquire 100% of Arlanda Express / A-Train AB, the operator of Arlanda Express.
+        </p>
+        <p>
+          A-Train runs the high-speed link between Greater Stockholm and Arlanda Airport in just 18 minutes, under a <Term t="PPP" /> concession until 2050. Its SEK 3bn investment plan brings a new fleet around 2030, with more than 50% more capacity.
+        </p>
+        <a href={`/work/${aTrain.slug}`} class="label inline-block rounded-full border border-paper/25 px-5 py-3 hover:border-coral hover:text-coral">Read the case →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1400px] px-4 pt-28 sm:px-8">
+    <p class="max-w-2xl text-xl leading-relaxed">
+      Looking for transaction advisory, or considering an investment in a transport asset? From greenfield and <Term t="M&A" /> to refinancing, we would love to talk.
+    </p>
+  </section>
+</Base>

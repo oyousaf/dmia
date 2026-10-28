@@ -1,0 +1,55 @@
+---
+import Mark from "./Mark.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+import { nav } from "../data/site";
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const active = (href: string) => path === href || path.startsWith(href + "/");
+---
+<header class="fixed inset-x-0 top-0 z-50 [view-transition-name:site-nav]">
+  <div class="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 py-4 sm:px-8">
+    <a href="/" class="group flex items-center gap-3 rounded-full bg-bg/85 py-2 pr-4 pl-3 backdrop-blur-xl" aria-label="DM Infrastructure Advisory, home">
+      <Mark class="h-6 w-auto text-coral transition-transform duration-500 group-hover:-skew-x-12" />
+      <span class="label hidden text-fg sm:inline">Infrastructure Advisory</span>
+      <span class="label rounded-full border border-coral/50 px-2 py-0.5 text-[0.6rem] text-accent" title="Unofficial design concept">Concept</span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden items-center gap-1 rounded-full bg-bg/85 p-1.5 backdrop-blur-xl md:flex">
+      {nav.map((l) => (
+        <a
+          href={l.href}
+          aria-current={active(l.href) ? "page" : undefined}
+          class="label rounded-full px-4 py-2.5 text-fg transition-colors hover:bg-fg/8 aria-[current=page]:bg-fg aria-[current=page]:text-bg"
+        >{l.label}</a>
+      ))}
+      <span class="ml-1"><ThemeToggle /></span>
+    </nav>
+
+    <button
+      type="button"
+      popovertarget="menu"
+      class="label flex items-center gap-2 rounded-full bg-fg px-4 py-3 text-bg md:hidden"
+    >Menu <span aria-hidden="true">≡</span></button>
+  </div>
+  <div class="progress-bar h-px bg-coral" style="scale: 0 1"></div>
+</header>
+
+<div popover id="menu" class="sheet md:hidden">
+  <div class="tracks pointer-events-none absolute inset-0 opacity-25"></div>
+  <div class="relative flex h-full flex-col justify-between p-6">
+    <div class="flex items-center justify-between">
+      <Mark class="h-7 w-auto text-coral" />
+      <button type="button" popovertarget="menu" popovertargetaction="hide" class="label rounded-full border border-paper/30 px-4 py-3">Close ✕</button>
+    </div>
+    <nav aria-label="Mobile" class="flex flex-col">
+      {[{ href: "/", label: "Home" }, ...nav].map((l, i) => (
+        <a href={l.href} class="display kinetic flex items-baseline gap-4 border-b border-paper/15 py-3 text-5xl">
+          <span class="label text-coral">0{i}</span><span>{l.label}</span>
+        </a>
+      ))}
+    </nav>
+    <div class="flex items-center justify-between">
+      <p class="label opacity-60">London · EC1V</p>
+      <ThemeToggle />
+    </div>
+  </div>
+</div>

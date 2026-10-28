@@ -1,0 +1,17 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import DepartureBoard from "../../components/DepartureBoard.tsx";
+import { work, capabilityTitle } from "../../data/site";
+
+const rows = work.map((w) => ({ ...w, service: capabilityTitle(w.capability) }));
+---
+<Base title="Work" description="Selected transport advisory case studies across rail, road and bus.">
+  <PageHero kicker="Case studies" n="01">
+    <span>Selected</span> <em><span>work.</span></em>
+    <Fragment slot="lede">From airport rail links to the M25: transactions, studies and programmes we have advised on.</Fragment>
+  </PageHero>
+  <section class="mx-auto max-w-[1400px] px-4 sm:px-8">
+    <DepartureBoard client:load rows={rows} />
+  </section>
+</Base>

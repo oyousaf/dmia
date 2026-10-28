@@ -1,0 +1,78 @@
+---
+import Base from "../../layouts/Base.astro";
+import Kicker from "../../components/Kicker.astro";
+import { work, capabilityTitle, type CaseStudy } from "../../data/site";
+
+export function getStaticPaths() {
+  return work.map((w, i) => ({
+    params: { slug: w.slug },
+    props: { c: w, next: work[(i + 1) % work.length] },
+  }));
+}
+
+const { c, next } = Astro.props as { c: CaseStudy; next: CaseStudy };
+const lineColor: Record<string, string> = { Rail: "var(--coral)", Road: "var(--verdigris)", Bus: "var(--fg)" };
+const meta = [
+  { k: "Ref", v: c.ref },
+  { k: "Line", v: c.sector },
+  { k: "Service", v: capabilityTitle(c.capability) },
+  { k: "Role", v: c.role },
+  ...(c.partner ? [{ k: "Partner", v: c.partner }] : []),
+];
+---
+<Base title={c.title} description={c.summary}>
+  <article>
+    <header class="mx-auto max-w-[1400px] px-4 pt-40 pb-16 sm:px-8 sm:pt-48">
+      <a href="/work" class="label text-muted hover:text-accent">← All work</a>
+      <div class="mt-10 h-2 w-40" style={`background:${lineColor[c.sector]}`}></div>
+      <h1 class="display mt-8 max-w-[16ch] text-[clamp(2.75rem,8vw,7.5rem)]" style={`view-transition-name: case-${c.slug}`}>{c.title}</h1>
+      <dl class="mt-14 grid grid-cols-2 gap-px overflow-hidden border border-rule bg-rule md:grid-cols-5">
+        {meta.map((m) => (
+          <div class="bg-bg p-5">
+            <dt class="label text-muted">{m.k}</dt>
+            <dd class="mt-2">{m.v}</dd>
+          </div>
+        ))}
+      </dl>
+    </header>
+
+    <section class="mx-auto grid max-w-[1400px] gap-16 px-4 py-16 sm:px-8 lg:grid-cols-[1.4fr_1fr]">
+      <div>
+        <Kicker>Overview</Kicker>
+        <p class="display mt-8 text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.12]">{c.summary}</p>
+      </div>
+      <div>
+        <Kicker>Scope</Kicker>
+        <ol class="mt-8">
+          {c.scope.map((s, i) => (
+            <li class="reveal flex gap-5 border-b border-rule py-5">
+              <span class="label pt-1 text-accent">0{i + 1}</span><span class="text-lg">{s}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {c.facts && (
+      <section class="mx-auto max-w-[1400px] px-4 py-8 sm:px-8">
+        <dl class="cut grid grid-cols-2 gap-px overflow-hidden bg-deep text-paper [--cut:28px] lg:grid-cols-4">
+          {c.facts.map((f) => (
+            <div class="p-8">
+              <dt class="label text-paper/50">{f.k}</dt>
+              <dd class="display mt-3 text-5xl text-coral">{f.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    <p class="label mx-auto max-w-[1400px] px-4 pt-6 text-muted sm:px-8">Concept copy: case details are illustrative, based on public summaries.</p>
+
+    <nav class="mx-auto mt-24 max-w-[1400px] px-4 sm:px-8" aria-label="Next case study">
+      <a href={`/work/${next.slug}`} class="group block border-y border-rule py-12">
+        <span class="label text-muted">Next station →</span>
+        <span class="display kinetic mt-4 block text-[clamp(2.25rem,6vw,5.5rem)] transition-colors group-hover:text-accent">{next.title}</span>
+      </a>
+    </nav>
+  </article>
+</Base>

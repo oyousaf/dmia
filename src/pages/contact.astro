@@ -1,0 +1,25 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import ContactForm from "../components/ContactForm.tsx";
+import { company } from "../data/site";
+---
+<Base title="Contact" description="Talk to DM Infrastructure Advisory about your transport or infrastructure project.">
+  <PageHero kicker="Contact" n="01">
+    <span>Start</span> <span>a</span> <em><span>conversation.</span></em>
+    <Fragment slot="lede">
+      Exploring an opportunity, looking for advice, or need a trusted partner on a transport project? Tell us where you are and we'll take it from there.
+    </Fragment>
+  </PageHero>
+
+  <section class="mx-auto grid max-w-[1400px] gap-16 px-4 sm:px-8 lg:grid-cols-[1.6fr_1fr]">
+    <ContactForm client:load />
+    <aside class="cut h-fit bg-panel p-8">
+      <p class="label text-muted">Registered office</p>
+      <address class="mt-4 text-lg leading-relaxed not-italic">{company.address}</address>
+      <p class="label mt-8 text-muted">Company number</p>
+      <p class="mt-2 font-mono">{company.number}</p>
+      <div class="tracks mt-10 h-20 opacity-60"></div>
+    </aside>
+  </section>
+</Base>

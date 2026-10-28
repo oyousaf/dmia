@@ -1,0 +1,83 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Kicker from "../components/Kicker.astro";
+import Term from "../components/Term.astro";
+import { capabilities, sectors, work } from "../data/site";
+
+const lineColor: Record<string, string> = { Rail: "var(--coral)", Road: "var(--verdigris)", Bus: "var(--fg)" };
+---
+<Base title="Services" description="Transaction, strategic, programme and commercial advisory across rail, road and bus.">
+  <PageHero kicker="Services" n="01">
+    <span>Commercial,</span> <span>technical</span> <span>&amp;</span> <em><span>financial.</span></em>
+    <Fragment slot="lede">One team bringing all three perspectives to every transport decision, from the first feasibility study to handback.</Fragment>
+  </PageHero>
+
+  <!-- Sectors -->
+  <section class="mx-auto max-w-[1400px] px-4 py-16 sm:px-8">
+    <Kicker n="02">Sectors</Kicker>
+    <div class="mt-10 grid gap-4 lg:grid-cols-3">
+      {sectors.map((s) => {
+        const count = work.filter((w) => w.sector === s.id).length;
+        return (
+          <article class="cut reveal relative flex min-h-[26rem] flex-col justify-between overflow-hidden bg-panel p-8">
+            <svg class="draw absolute inset-x-0 top-24 h-24 w-full" viewBox="0 0 400 100" preserveAspectRatio="none" fill="none" aria-hidden="true">
+              <path d="M0 70 H150 L190 30 H400" pathLength="1" stroke={lineColor[s.id]} stroke-width="8" vector-effect="non-scaling-stroke" />
+            </svg>
+            <div class="flex items-center justify-between">
+              <span class="flex size-12 items-center justify-center rounded-full border-4 font-mono font-bold" style={`border-color:${lineColor[s.id]}`}>{s.code}</span>
+              <span class="label text-muted">{count} {count === 1 ? "project" : "projects"}</span>
+            </div>
+            <div>
+              <h3 class="display text-6xl">{s.id}</h3>
+              <p class="mt-4 text-muted">{s.blurb}</p>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Capabilities -->
+  <section class="mx-auto max-w-[1400px] px-4 py-24 sm:px-8">
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.6fr]">
+      <div class="lg:sticky lg:top-32 lg:self-start">
+        <Kicker n="03">Capabilities</Kicker>
+        <h2 class="display mt-6 text-[clamp(2.5rem,5vw,4.5rem)]">Four ways <em>in.</em></h2>
+        <p class="mt-6 max-w-sm text-muted">
+          Whether you are bidding for a <Term t="PPP" />, financing a fleet or acting as <Term t="LTA" />, we join at the point you need us.
+        </p>
+      </div>
+      <div class="border-t border-rule">
+        {capabilities.map((c, i) => (
+          <details id={c.id} class="acc group scroll-mt-28 border-b border-rule" open={i === 0}>
+            <summary class="flex cursor-pointer list-none items-baseline gap-6 py-8 [&::-webkit-details-marker]:hidden">
+              <span class="label text-accent">{c.n}</span>
+              <span class="display kinetic flex-1 text-[clamp(2rem,4.5vw,3.75rem)]">{c.title}</span>
+              <span class="text-3xl text-accent transition-transform duration-500 group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <div class="grid gap-6 pb-10 sm:grid-cols-[1fr_1.2fr] sm:pl-14">
+              <p class="text-xl leading-snug">{c.lede}</p>
+              <ul class="space-y-3">
+                {c.items.map((it) => (
+                  <li class="flex gap-3 border-b border-rule pb-3 text-muted last:border-0">
+                    <span class="mt-2.5 h-px w-4 shrink-0 bg-coral" aria-hidden="true"></span>{it}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .acc::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 0.5s cubic-bezier(0.7, 0, 0.2, 1), content-visibility 0.5s allow-discrete;
+  }
+  .acc[open]::details-content { block-size: auto; }
+</style>

@@ -1,0 +1,9 @@
+---
+interface Props { n?: string; class?: string }
+const { n, class: cls = "" } = Astro.props;
+---
+<p class={`label flex items-center gap-3 text-muted ${cls}`}>
+  {n && <span class="text-accent">{n}</span>}
+  <span class="h-px w-8 bg-current opacity-40"></span>
+  <slot />
+</p>

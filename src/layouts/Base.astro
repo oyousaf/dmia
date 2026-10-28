@@ -1,0 +1,35 @@
+---
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props { title?: string; description?: string }
+const {
+  title,
+  description = "Commercial, technical and financial advisory for rail, road and bus. Unofficial design concept.",
+} = Astro.props;
+const full = title ? `${title} · DM Infrastructure Advisory` : "DM Infrastructure Advisory · Transport advisory";
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{full}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="author" content="Legxcy Solutions" />
+    <meta name="theme-color" content="#F3EEE4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E1420" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="label sr-only z-[60] bg-coral p-3 text-night focus:not-sr-only focus:fixed focus:top-3 focus:left-3">Skip to content</a>
+    <Nav />
+    <main id="main"><slot /></main>
+    <Footer />
+  </body>
+</html>
