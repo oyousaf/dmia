@@ -20,6 +20,8 @@
     const apply = () => (root.dataset.theme = next);
     try { localStorage.setItem("theme", next); } catch {}
     if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) return apply();
-    document.startViewTransition(apply);
+    // Flatten named layers (nav, case titles) so they don't paint over the menu mid-fade
+    root.classList.add("theme-vt");
+    document.startViewTransition(apply).finished.finally(() => root.classList.remove("theme-vt"));
   }));
 </script>
