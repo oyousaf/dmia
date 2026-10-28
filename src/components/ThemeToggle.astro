@@ -1,6 +1,6 @@
 <button
   type="button"
-  id="theme-toggle"
+  data-theme-toggle
   class="label group relative flex size-9 items-center justify-center rounded-full border border-rule hover:border-coral"
   aria-label="Toggle colour scheme"
 >
@@ -10,8 +10,8 @@
   </svg>
 </button>
 <script>
-  const btn = document.getElementById("theme-toggle");
-  btn?.addEventListener("click", () => {
+  // Rendered in both the desktop nav and the mobile sheet, so bind every instance
+  document.querySelectorAll("[data-theme-toggle]").forEach((btn) => btn.addEventListener("click", () => {
     const root = document.documentElement;
     const dark = root.dataset.theme
       ? root.dataset.theme === "dark"
@@ -21,5 +21,5 @@
     try { localStorage.setItem("theme", next); } catch {}
     if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) return apply();
     document.startViewTransition(apply);
-  });
+  }));
 </script>
